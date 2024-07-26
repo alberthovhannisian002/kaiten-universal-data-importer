@@ -8,10 +8,11 @@ This document outlines the required fields and their descriptions for importing 
 2. [General Requirements](#general-requirements)
 3. [User Data](#user-data)
 4. [Boards Data](#boards-data)
-5. [Cards Data](#cards-data)
-6. [Comments Data](#comments-data)
-7. [Card files Data](#card-files-data)
-8. [Error Handling](#error-handling)
+5. [Columns Data](#columns-data)
+6. [Cards Data](#cards-data)
+7. [Comments Data](#comments-data)
+8. [Card files Data](#card-files-data)
+9. [Custom fields Data](#custom-fields-data)
 
 ## Introduction
 
@@ -28,18 +29,18 @@ There are some required entities that is used to process the import - boards, co
 
 Below is represented the required fields for entities
 
-## User Data
+## Users Data
 
 Description of importing process: Validates json data, if there are no validation issues, checks if the company is already existing for user, after that is checking if the user has access to some specific space, after that we are sending invite to user with default role of writer
 
 ### Fields
 
-| Field Name  | Type   | Required | Description                               |
-|-------------|--------|----------|-------------------------------------------|
-| `id`        | String | Yes      | Unique identifier for the user.           |
-| `full_name` | String | No       | Full name of the user.                    |
-| `email`     | String | Yes      | Email address of the user. Must be valid. |
-| `username`  | String | No       | Username.                                 |
+| Field Name  | Type             | Required | Description                               |
+|-------------|------------------|----------|-------------------------------------------|
+| `id`        | String \| Number | Yes      | Unique identifier for the user.           |
+| `full_name` | String           | No       | Full name of the user.                    |
+| `email`     | String           | Yes      | Email address of the user. Must be valid. |
+| `username`  | String           | No       | Username.                                 |
 
 ### Description
 
@@ -65,27 +66,20 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### Fields
 
-| Field Name          | Type   | Required | Description                            |
-|---------------------|--------|----------|----------------------------------------|
-| `id`                | String | Yes      | Unique identifier of the board.        |
-| `title`             | String | Yes      | Name of the board.  Maxlength 128 char |
-| `author_id`         | String | No       | Unique identifier of author of board.  |
-| `column.id`         | String | Yes      | Unique identifier of column in board.  |
-| `column.title`      | String | Yes      | Name of column.                        |
-| `column.board_id`   | String | Yes      | Unique identifier of board.            |
-| `column.sort_order` | Number | No       | Order sequence number                  |
-| `column.type`       | Number | No       | Sets up column type                    |
+| Field Name  | Type             | Required | Description                           |
+|-------------|------------------|----------|---------------------------------------|
+| `id`        | String \| Number | Yes      | Unique identifier of the board.       |
+| `title`     | String           | Yes      | Name of the board.  Max 128 char      |
+| `author_id` | String           | No       | Unique identifier of author of board. |
+| `created`   | Null or DateTime | No       | Date of creation of board             |
+
 
 ### Description
 
 - **id**: A unique identifier for the board, which is used to map and track the board within our system.
 - **title**: The complete name of the board, used for display purposes.
 - **author_id**: A unique identifier of author of board, used for display purposes.
-- **column.id**: Unique identifier of column in board.
-- **column.title**: The complete name of the column, used for display purposes.
-- **column.board_id**: A unique identifier of board, which is used to make relation between boards and columns.
-- **column.sort_order**: Defines the order of columns inside space.
-- **column.type**: Defines the actual type of column, available values are queued (value 1), in progress(value 2), done(value 3).
+- **created**: Null or Datetime of creation of board
 
 ### Example JSON Structure
 
@@ -100,31 +94,76 @@ Description of importing process: Validates json data, if there are no validatio
 ]
 ```
 
+## Columns data
+
+### Fields
+
+| Field Name   | Type             | Required | Description                           |
+|--------------|------------------|----------|---------------------------------------|
+| `id`         | String \| Number | Yes      | Unique identifier of column in board. |
+| `title`      | String           | Yes      | Name of column.                       |
+| `board_id`   | String \| Number | Yes      | Unique identifier of board.           |
+| `sort_order` | Number           | No       | Order sequence number                 |
+| `type`       | Number           | No       | Sets up column type                   |
+| `created`    | Null or DateTime | No       | Date of creation of column            |
+
+### Description
+
+- **id**: Unique identifier of column in board.
+- **title**: The complete name of the column, used for display purposes.
+- **board_id**: A unique identifier of board, which is used to make relation between boards and columns.
+- **sort_order**: Defines the order of columns inside space.
+- **type**: Defines the actual type of column, available values are queued (value 1), in progress(value 2), done(value 3).
+- **created**: Null or Datetime of creation of column
+
+### Example JSON Structure
+
+```json
+ [
+  {
+      "id": "1207254524924717",
+      "title": "To do",
+      "created": "2024-05-07T06:34:24.413Z",
+      "sort_order": 1,
+      "type": 1,
+      "board_id": "1207254524924716"
+    },
+    {
+      "id": "1207254524924721",
+      "title": "In progress",
+      "created": "2024-05-07T06:34:24.413Z",
+      "sort_order": 2,
+      "type": 2,
+      "board_id": "1207254524924716"
+    }
+]
+```
+
 ## Cards data
 
 ### Fields
 
-| Field Name         | Type         | Required | Description                               |
-|--------------------|--------------|----------|-------------------------------------------|
-| `id`               | String       | Yes      | Unique identifier of card.                |
-| `owner_id`         | String       | Yes      | Unique identifier of owner of card.       |
-| `responsible_id`   | String       | No       | Unique identifier of responsible of card. |
-| `column_id`        | String       | Yes      | Unique identifier of column in board.     |
-| `title`            | String       | Yes      | Name of column.  Max length 1024 chars    |
-| `description`      | String       | Yes      | The description content of card           |
-| `description_type` | String       | No       | Defines the type of description.          |
-| `condition`        |              | No       | .                                         |
-| `tags`             |              | No       | tag_name max length 128 chars ??.         |
-| `history`          | Object[]     | No       | .                                         |
-| `links`            |              | No       | .                                         |
-| `completed`        |              | No       | .                                         |
-| `completed_by`     |              | No       | .                                         |
-| `properties`       |              | No       | .                                         |
-| `due_date`         | Null or Date | No       | Due date of card.                         |
-| `planned_start`    | Null or Date | No       | Planned start date of card.               |
-| `planned_end`      | Null or Date | No       | Planned end date of card.                 |
-| `created`          | Null or Date | No       | Date of creation of card .                |
-| `checklist`        |              | No       |                                           |
+| Field Name         | Type             | Required | Description                               |
+|--------------------|------------------|----------|-------------------------------------------|
+| `id`               | String \| Number | Yes      | Unique identifier of card.                |
+| `owner_id`         | String \| Number | Yes      | Unique identifier of owner of card.       |
+| `responsible_id`   | String \| Number | No       | Unique identifier of responsible of card. |
+| `column_id`        | String \| Number | Yes      | Unique identifier of column in board.     |
+| `title`            | String           | Yes      | Title of card.  Max length 1024 chars     |
+| `description`      | String           | Yes      | The description content of card           |
+| `description_type` | String           | No       | Defines the type of description.          |
+| `condition`        | Number           | No       | ?.                                        |
+| `tags`             | CardTags[]       | No       | Defines the tags of card.                 |
+| `history`          | CardHistory[]    | No       | Defines the card actions history.         |
+| `links`            | CardLinks[]      | No       | .                                         |
+| `completed`        |                  | No       | .                                         |
+| `completed_by`     |                  | No       | .                                         |
+| `properties`       |                  | No       | .                                         |
+| `due_date`         | Null or Date     | No       | Due date of card.                         |
+| `planned_start`    | Null or Date     | No       | Planned start date of card.               |
+| `planned_end`      | Null or Date     | No       | Planned end date of card.                 |
+| `created`          | Null or Date     | No       | Date of creation of card .                |
+| `checklist`        | CardChecklist[]  | No       | The checklists of card.                   |
 
 ### Description
 
@@ -276,7 +315,40 @@ Description of importing process: Validates json data, if there are no validatio
                 }
             }
         ],
-        "created": "2024-07-22T07:01:42.395Z",
+       "checklists": [
+         {
+           "name": "Subtasks",
+           "items": [
+             {
+               "text": "new one",
+               "sort_order": 1,
+               "checked": true,
+               "created": "2024-05-13T15:36:49.384Z",
+               "checked_at": "2024-05-27T12:20:21.274Z",
+               "checked_by": "1207221341939584",
+               "created_by": "1207221341939584",
+               "due_date": {
+                 "value": "2024-05-16",
+                 "time_present": false
+               },
+               "responsible_id": "1207221341939584"
+             },
+             {
+               "text": "second",
+               "sort_order": 2,
+               "checked": false,
+               "created": "2024-05-13T15:36:52.931Z",
+               "created_by": "1207221341939584",
+               "responsible_id": "1207221341939584",
+               "due_date": {
+                 "value": "2024-05-29T16:00:00.000Z",
+                 "time_present": true
+               }
+             }
+           ]
+         }
+         ],
+         "created": "2024-07-22T07:01:42.395Z",
         "links": [
             {
                 "url": "https://app.asana.com/0/1207864633562249/1207864637859364"
@@ -332,18 +404,100 @@ Description of importing process: Validates json data, if there are no validatio
 ]
 ```
 
+### CardTags fields
+
+| Field Name | Type             | Required | Description                    |
+|------------|------------------|----------|--------------------------------|
+| `id`       | String \| Number | Yes      | Unique identifier of card tag. |
+| `name`     | String           | Yes      | Name of card tag.              |
+
+```json
+{
+  "id": "1207254524924728",
+  "name": "some new"
+}
+```
+
+### CardHistory fields
+
+| Field Name  | Type             | Required | Description                    |
+|-------------|------------------|----------|--------------------------------|
+| `type`      | String \| Number | Yes      | Unique identifier of card tag. |
+| `created`   | String           | Yes      | Name of card tag.              |
+| `author_id` | String           | Yes      | Name of card tag.              |
+| `old_value` | String           | Yes      | Name of card tag.              |
+| `new_value` | String           | Yes      | Name of card tag.              |
+
+
+```json
+{
+      "type": "card_move",
+      "created": "2024-05-14T06:00:21.323Z",
+      "author_id": "1207221341939584",
+      "old_value": {
+        "column_id": "1207254524924722"
+      },
+      "new_value": {
+        "column_id": "1207254524924717"
+      }
+}
+```
+
+### CardLinks fields
+
+| Field Name    | Type             | Required | Description                    |
+|---------------|------------------|----------|--------------------------------|
+| `url`         | String \| Number | Yes      | Unique identifier of card tag. |
+| `description` | String           | Yes      | Name of card tag.              |
+| `created`     | String           | Yes      | Name of card tag.              |
+
+```json
+{
+    "url": "https://google.com",
+    "description": "some description",
+    "created": "2024-05-13T15:36:35.567Z"
+}
+```
+
+### CardChecklist fields
+
+| Field Name      | Type            | Required | Description                    |
+|-----------------|-----------------|----------|--------------------------------|
+| `name`          | String          |          | Unique identifier of card tag. |
+| `items`         | ChecklistItem[] |          | Name of card tag.              |
+| `created`       | String          |          | Name of card tag.              |
+| `due_date`      | String          |          | Name of card tag.              |
+| `planned_start` | String          |          | Name of card tag.              |
+| `planned_end`   | String          |          | Name of card tag.              |
+
+
+### ChecklistItem fields
+
+| Field Name       | Type            | Required | Description                    |
+|------------------|-----------------|----------|--------------------------------|
+| `text`           | String          |          | Unique identifier of card tag. |
+| `sort_order`     | ChecklistItem[] |          | Name of card tag.              |
+| `checked`        | String          |          | Name of card tag.              |
+| `created`        | String          |          | Name of card tag.              |
+| `checked_at`     | String          |          | Name of card tag.              |
+| `checked_by`     | String          |          | Name of card tag.              |
+| `created_by`     | String          |          | Name of card tag.              |
+| `due_date`       | String          |          | Name of card tag.              |
+| `responsible_id` | String          |          | Name of card tag.              |
+
+
 ## Comments data
 
 ### Fields
 
-| Field Name    | Type         | Required | Description                          |
-|---------------|--------------|----------|--------------------------------------|
-| `id`          | String       | Yes      | Unique identifier of comment.        |
-| `card_id`     | String       | Yes      | Unique identifier of card.           |
-| `text`        | String       | Yes      | Content of comment.                  |
-| `author_name` | String       | No       | Full name of comment author.         |
-| `author_id`   | String       | No       | Unique identifier of comment author. |
-| `created`     | Null or Date | No       | Date od creation of comment          |
+| Field Name    | Type             | Required | Description                          |
+|---------------|------------------|----------|--------------------------------------|
+| `id`          | String \| Number | Yes      | Unique identifier of comment.        |
+| `card_id`     | String \| Number | Yes      | Unique identifier of card.           |
+| `text`        | String           | Yes      | Content of comment.                  |
+| `author_name` | String           | No       | Full name of comment author.         |
+| `author_id`   | String \| Number | No       | Unique identifier of comment author. |
+| `created`     | Null or Datetime | No       | Date of creation of comment          |
 
 ### Description
 
@@ -436,17 +590,79 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### Fields
 
-| Field Name | Type   | Required | Description                                                    |
-|------------|--------|----------|----------------------------------------------------------------|
-| `id`       | String | Yes      | Unique identifier of field. Max length 1024                    |
-| `type`     | String | Yes      | Allowed types 'string','number','date','select','multi_select' |
-| `name`     | String | Yes      | Name of field.                                                 |
+| Field Name | Type                 | Required | Description                                                    |
+|------------|----------------------|----------|----------------------------------------------------------------|
+| `id`       | String \| Number     | Yes      | Unique identifier of field. Max length 1024 chars              |
+| `type`     | String               | Yes      | Allowed types 'string','number','date','select','multi_select' |
+| `name`     | String               | Yes      | Name of field. Max length 128 chars                            |
+| `options`  | CustomFieldsObject[] | No       | Options of custom field                                        |
+
 
 ### Description
 
-- **id**: .
-- **type**: .
-- **name**: .
+- **id**: Unique identifier of custom field.
+- **type**: Defines the type of custom field, allowed types are string, number, date, select, multi_select.
+- **name**: Defines the name of custom field, used for display purposes.
+- **options**: Defines the available options for selected custom field type
 
-## Error handling
+### Example JSON Structure
 
+```json
+[
+  {
+    "id": "1207864637859355",
+    "type": "select",
+    "name": "Status",
+    "options": [
+      {
+        "id": "1207864637859356",
+        "value": "On track",
+        "color": 9,
+        "sort_order": 0
+      },
+      {
+        "id": "1207864637859357",
+        "value": "At risk",
+        "color": 12,
+        "sort_order": 1
+      },
+      {
+        "id": "1207864637859358",
+        "value": "Off track",
+        "color": 1,
+        "sort_order": 2
+      }
+    ]
+  }
+]
+```
+
+### CustomFieldsObject fields
+
+| Field Name   | Type             | Required | Description                              |
+|--------------|------------------|----------|------------------------------------------|
+| `id`         | String \| Number | -        | Unique identifier of custom field option |
+| `value`      | String           | -        | Value of custom field option             |
+| `color`      | String           | -        |                                          |
+| `sort_order` | Number           | -        |                                          |
+
+
+### CustomFieldsObject Description
+
+- **id**: Unique identifier of custom field option
+- **value**: Value of custom field option
+- **color**: .
+- **sort_order**: .
+
+### Example JSON Structure
+
+```json
+[
+  {
+    "id": "1207864637859351",
+    "value": "Low",
+    "color": 8,
+    "sort_order": 0
+  }
+]
+```
