@@ -143,27 +143,31 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### Fields
 
-| Field Name         | Type             | Required | Description                               |
-|--------------------|------------------|----------|-------------------------------------------|
-| `id`               | String \| Number | Yes      | Unique identifier of card.                |
-| `owner_id`         | String \| Number | Yes      | Unique identifier of owner of card.       |
-| `responsible_id`   | String \| Number | No       | Unique identifier of responsible of card. |
-| `column_id`        | String \| Number | Yes      | Unique identifier of column in board.     |
-| `title`            | String           | Yes      | Title of card.  Max length 1024 chars     |
-| `description`      | String           | Yes      | The description content of card           |
-| `description_type` | String           | No       | Defines the type of description.          |
-| `condition`        | Number           | No       | ?.                                        |
-| `tags`             | CardTags[]       | No       | Defines the tags of card.                 |
-| `history`          | CardHistory[]    | No       | Defines the card actions history.         |
-| `links`            | CardLinks[]      | No       | .                                         |
-| `completed`        |                  | No       | .                                         |
-| `completed_by`     |                  | No       | .                                         |
-| `properties`       |                  | No       | .                                         |
-| `due_date`         | Null or Date     | No       | Due date of card.                         |
-| `planned_start`    | Null or Date     | No       | Planned start date of card.               |
-| `planned_end`      | Null or Date     | No       | Planned end date of card.                 |
-| `created`          | Null or Date     | No       | Date of creation of card .                |
-| `checklist`        | CardChecklist[]  | No       | The checklists of card.                   |
+| Field Name            | Type                    | Required | Description                                            |
+|-----------------------|-------------------------|----------|--------------------------------------------------------|
+| `id`                  | String \| Number        | Yes      | Unique identifier of card.                             |
+| `owner_id`            | String \| Number        | Yes      | Unique identifier of owner of card.                    |
+| `responsible_id`      | String \| Number        | No       | Unique identifier of responsible of card.              |
+| `column_id`           | String \| Number        | Yes      | Unique identifier of column in board.                  |
+| `title`               | String                  | Yes      | Title of card.  Max length 1024 chars                  |
+| `description`         | String                  | No       | The description content of card                        |
+| `description_type`    | String                  | No       | Defines the type of description.                       |
+| `condition`           | Number                  | No       | ?.                                                     |
+| `tags`                | CardTags[]              | No       | Defines the tags of card.                              |
+| `history`             | CardHistory[]           | No       | Defines the card actions history.                      |
+| `links`               | CardLinks[]             | No       | Defines the links attached to card.                    |
+| `completed`           |                         | No       | .                                                      |
+| `completed_by`        | String \| Number        | No       | ID of user who completed the card.                     |
+| `properties`          | Array                   | No       | Array of custom properties of card.                    |
+| `due_date`            | Null or Date            | No       | Due date of card.                                      |
+| `planned_start`       | Null or Date            | No       | Planned start date of card.                            |
+| `planned_end`         | Null or Date            | No       | Planned end date of card.                              |
+| `created`             | Null or DateTime string | No       | Date of creation of card .                             |
+| `checklists`          | CardChecklist[]         | No       | The checklists of card.                                |
+| `blocked_by_card_ids` | Array                   | No       | IDs of cards which are blocking current card.          |
+| `blocks_card_ids`     | Array                   | No       | IDs of cards which are bloked because of current card. |
+| `parent_card_ids`     | Array                   | No       | IDs of parent cards.                                   |
+| `child_card_ids`      | Array                   | No       | IDs of child cards.                                    |
 
 ### Description
 
@@ -175,15 +179,19 @@ Description of importing process: Validates json data, if there are no validatio
 - **description**: The content description of card.
 - **description_type**: The type of description, available values are markdown and html.
 - **condition**: .
-- **tags**: .
-- **history**: .
-- **links**: .
+- **tags**: Array of tags that are attached to card.
+- **history**: Array of card actions history.
+- **links**: Array of links that are attached to card.
 - **completed**: .
-- **completed_by**: .
-- **properties**: .
+- **completed_by**: ID of user who completed the card.
+- **properties**: Array of custom properties available for current card.
 - **due_date**: Due date of card.
 - **planned_start**: Planned start date of card.
 - **planned_end**: Planned end date of card.
+- **blocked_by_card_ids**: Array of card ids which are blocking the current card. 
+- **blocks_card_ids**: Array of card ids which are blocked because of current card.
+- **parent_card_ids**: Array of parent card ids. 
+- **child_card_ids**:  Array of child card ids.
 
 ### Example JSON Structure
 
@@ -406,10 +414,10 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CardTags fields
 
-| Field Name | Type             | Required | Description                    |
-|------------|------------------|----------|--------------------------------|
-| `id`       | String \| Number | Yes      | Unique identifier of card tag. |
-| `name`     | String           | Yes      | Name of card tag.              |
+| Field Name | Type             | Required | Description                           |
+|------------|------------------|----------|---------------------------------------|
+| `id`       | String \| Number | Yes      | Unique identifier of card tag.        |
+| `name`     | String           | Yes      | Name of card tag. Maxlength 128 chars |
 
 ```json
 {
@@ -420,14 +428,14 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CardHistory fields
 
-| Field Name  | Type             | Required | Description                    |
-|-------------|------------------|----------|--------------------------------|
-| `type`      | String \| Number | Yes      | Unique identifier of card tag. |
-| `created`   | String           | Yes      | Name of card tag.              |
-| `author_id` | String           | Yes      | Name of card tag.              |
-| `old_value` | String           | Yes      | Name of card tag.              |
-| `new_value` | String           | Yes      | Name of card tag.              |
-
+| Field Name  | Type             | Required | Description                                                                                                                        |
+|-------------|------------------|----------|------------------------------------------------------------------------------------------------------------------------------------|
+| `type`      | String           | Yes      | Type of history action, available values - `card_move`, `card_due_date_change`, `card_tag_add`, `card_tag_remove`, `card_assign` . |
+| `created`   | DateTime         | Yes      | DateTime of history action.                                                                                                        |
+| `author_id` | String \| Number | Yes      | ID of author of action.                                                                                                            |
+| `old_value` | Object           | No       | Object where is represented the old value that should be changed.                                                                  |
+| `new_value` | Object           | No       | Object where is represented the new value.                                                                                         |
+| `value`     | Object           | No       | If there is an old value you should send value object with new values that should be applied.                                      |
 
 ```json
 {
@@ -445,11 +453,11 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CardLinks fields
 
-| Field Name    | Type             | Required | Description                    |
-|---------------|------------------|----------|--------------------------------|
-| `url`         | String \| Number | Yes      | Unique identifier of card tag. |
-| `description` | String           | Yes      | Name of card tag.              |
-| `created`     | String           | Yes      | Name of card tag.              |
+| Field Name    | Type                    | Required | Description                                                          |
+|---------------|-------------------------|----------|----------------------------------------------------------------------|
+| `url`         | String \| Number        | Yes      | The URL of resource that should be displayed. Max length 16384 chars |
+| `description` | String                  | No       | String description of card link.                                     |
+| `created`     | DateTime string or Null | No       | DateTime of adding card link.                                        |
 
 ```json
 {
@@ -461,30 +469,32 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CardChecklist fields
 
-| Field Name      | Type            | Required | Description                    |
-|-----------------|-----------------|----------|--------------------------------|
-| `name`          | String          |          | Unique identifier of card tag. |
-| `items`         | ChecklistItem[] |          | Name of card tag.              |
-| `created`       | String          |          | Name of card tag.              |
-| `due_date`      | String          |          | Name of card tag.              |
-| `planned_start` | String          |          | Name of card tag.              |
-| `planned_end`   | String          |          | Name of card tag.              |
+| Field Name      | Type                | Required | Description                         |
+|-----------------|---------------------|----------|-------------------------------------|
+| `name`          | String              | No       | Name of checklist.                  |
+| `items`         | ChecklistItem[]     | No       | Array of checklist items.           |
+| `created`       | DateTime string     | No       | DateTime of creation checklist.     |
+| `due_date`      | ChecklistDateObject | No       | Due date of checklist.              |
+| `planned_start` | ChecklistDateObject | No       | Date of planned start of checklist. |
+| `planned_end`   | ChecklistDateObject | No       | Date of planned end of checklist.   |
 
 
 ### ChecklistItem fields
 
-| Field Name       | Type            | Required | Description                    |
-|------------------|-----------------|----------|--------------------------------|
-| `text`           | String          |          | Unique identifier of card tag. |
-| `sort_order`     | ChecklistItem[] |          | Name of card tag.              |
-| `checked`        | String          |          | Name of card tag.              |
-| `created`        | String          |          | Name of card tag.              |
-| `checked_at`     | String          |          | Name of card tag.              |
-| `checked_by`     | String          |          | Name of card tag.              |
-| `created_by`     | String          |          | Name of card tag.              |
-| `due_date`       | String          |          | Name of card tag.              |
-| `responsible_id` | String          |          | Name of card tag.              |
+| Field Name       | Type                | Required | Description                                       |
+|------------------|---------------------|----------|---------------------------------------------------|
+| `text`           | String              | Yes      | Text description of checklist item.               |
+| `sort_order`     | Number              | No       | Order of checklist item in checklist.             |
+| `checked`        | Boolean             | No       | If true checklist is marked as done.              |
+| `created`        | DateTime string     | No       | DateTime of creation checklist item.              |
+| `checked_at`     | DateTime string     | No       | DateTime when checklist item was checked.         |
+| `checked_by`     | Number \| String    | No       | ID of user who checked the checklist item.        |
+| `created_by`     | Number \| String    | No       | ID of user who created the checklist item.        |
+| `due_date`       | ChecklistDateObject | No       | Due date of checklist item.                       |
+| `responsible_id` | Number \| String    | No       | ID of user who is responsible for checklist item. |
 
+
+### ChecklistDateObject ?
 
 ## Comments data
 
@@ -543,9 +553,9 @@ Description of importing process: Validates json data, if there are no validatio
 | `external`      | Boolean      | No       | Boolean value which specifiying if the storage is external or not |
 | `external_type` | String       | No       | String which represents external storage type                     |
 | `external_url`  | String       | No       | URL of external storage file                                      |
-| `size`          | Number       | No       | Size of card file ?                                               |
-| `download_url`  | String       | No       | URL of external storage file       ?                              |
-| `path`          | String       | No       | URL of external storage file      ?                               |
+| `size`          | Number       | No       | Size of card file                                                 |
+| `download_url`  | String       | No       |                                                                   |
+| `path`          | String       | No       |                                                                   |
 
 
 ### Description
