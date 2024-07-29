@@ -51,6 +51,7 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### Example JSON Structure
 
+
 ```json
 [
   {
@@ -152,11 +153,10 @@ Description of importing process: Validates json data, if there are no validatio
 | `title`               | String                  | Yes      | Title of card.  Max length 1024 chars                  |
 | `description`         | String                  | No       | The description content of card                        |
 | `description_type`    | String                  | No       | Defines the type of description.                       |
-| `condition`           | Number                  | No       | ?.                                                     |
+| `condition`           | Number                  | No       | Defines the current card status condition.             |
 | `tags`                | CardTags[]              | No       | Defines the tags of card.                              |
 | `history`             | CardHistory[]           | No       | Defines the card actions history.                      |
 | `links`               | CardLinks[]             | No       | Defines the links attached to card.                    |
-| `completed`           |                         | No       | .                                                      |
 | `completed_by`        | String \| Number        | No       | ID of user who completed the card.                     |
 | `properties`          | Array                   | No       | Array of custom properties of card.                    |
 | `due_date`            | Null or Date            | No       | Due date of card.                                      |
@@ -178,11 +178,10 @@ Description of importing process: Validates json data, if there are no validatio
 - **column_id**: Unique identifier of column in which the card is placed.
 - **description**: The content description of card.
 - **description_type**: The type of description, available values are markdown and html.
-- **condition**: .
+- **condition**: Number which identifies the current status condition of card, available values are - active(condition: 1), archived(condition: 2), deleted(condition: 3) .
 - **tags**: Array of tags that are attached to card.
 - **history**: Array of card actions history.
 - **links**: Array of links that are attached to card.
-- **completed**: .
 - **completed_by**: ID of user who completed the card.
 - **properties**: Array of custom properties available for current card.
 - **due_date**: Due date of card.
@@ -494,7 +493,15 @@ Description of importing process: Validates json data, if there are no validatio
 | `responsible_id` | Number \| String    | No       | ID of user who is responsible for checklist item. |
 
 
-### ChecklistDateObject ?
+### ChecklistDateObject
+
+
+| Field Name     | Type             | Required | Description                                                            |
+|----------------|------------------|----------|------------------------------------------------------------------------|
+| `value`        | Date \| DateTime | No       | Date value .                                                           |
+| `time_present` | Boolean          | No       | Boolean value that defines if `value` contains only date or time also. |
+
+If the value includes time (DateTime) so `time_present` parameter should be set to true
 
 ## Comments data
 
@@ -554,8 +561,6 @@ Description of importing process: Validates json data, if there are no validatio
 | `external_type` | String       | No       | String which represents external storage type                     |
 | `external_url`  | String       | No       | URL of external storage file                                      |
 | `size`          | Number       | No       | Size of card file                                                 |
-| `download_url`  | String       | No       |                                                                   |
-| `path`          | String       | No       |                                                                   |
 
 
 ### Description
@@ -649,20 +654,26 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CustomFieldsObject fields
 
-| Field Name   | Type             | Required | Description                              |
-|--------------|------------------|----------|------------------------------------------|
-| `id`         | String \| Number | -        | Unique identifier of custom field option |
-| `value`      | String           | -        | Value of custom field option             |
-| `color`      | String           | -        |                                          |
-| `sort_order` | Number           | -        |                                          |
+| Field Name   | Type                     | Required | Description                                                     |
+|--------------|--------------------------|----------|-----------------------------------------------------------------|
+| `id`         | String \| Number         | Yes      | Unique identifier of custom field option. Max length 1024 chars |
+| `value`      | string \| number \| DATE | Yes      | Value of custom field option  Max length 128 chars              |
+| `type`       | String                   | Yes      | Defines the type of custom field, see available options below   |
+| `name`       | String                   | Yes      | Defines the name of custom field, max length 128                |
+| `options`    | OPTION[]                 | No       | All variants for `select` \| `multi_select`                     |
+| `color`      | String                   | No       | Integer (1-16), based on color schema                           |
+| `sort_order` | Number                   | No       | Float sorting value                                             |
 
 
 ### CustomFieldsObject Description
 
 - **id**: Unique identifier of custom field option
 - **value**: Value of custom field option
-- **color**: .
-- **sort_order**: .
+- **type**: Available options of custom field type `string`, `number`, `date`, `select`, `multi_select`.
+- **name**: Defines the name of custom field.
+- **options**: The options of `select` or `multi-select`
+- **color**: An integer (1-16) that defines the selected color of custom property (in order that is displayed while selecting)
+- **sort_order**: The numberic value which defines the sort order.
 
 ### Example JSON Structure
 
