@@ -13,6 +13,7 @@ This document outlines the required fields and their descriptions for importing 
 7. [Comments Data](#comments-data)
 8. [Card files Data](#card-files-data)
 9. [Custom fields Data](#custom-fields-data)
+10. [Meta data](#meta-data)
 
 ## Introduction
 
@@ -158,7 +159,7 @@ Description of importing process: Validates json data, if there are no validatio
 | `history`             | CardHistory[]           | No       | Defines the card actions history.                      |
 | `links`               | CardLinks[]             | No       | Defines the links attached to card.                    |
 | `completed_by`        | String \| Number        | No       | ID of user who completed the card.                     |
-| `properties`          | Array                   | No       | Array of custom properties of card.                    |
+| `properties`          | CardProperties[]        | No       | Array of custom properties of card.                    |
 | `due_date`            | Null or Date            | No       | Due date of card.                                      |
 | `planned_start`       | Null or Date            | No       | Planned start date of card.                            |
 | `planned_end`         | Null or Date            | No       | Planned end date of card.                              |
@@ -191,6 +192,28 @@ Description of importing process: Validates json data, if there are no validatio
 - **blocks_card_ids**: Array of card ids which are blocked because of current card.
 - **parent_card_ids**: Array of parent card ids. 
 - **child_card_ids**:  Array of child card ids.
+
+
+### CardProperties fields
+
+| Field Name | Type                                           | Required | Description                           |
+|------------|------------------------------------------------|----------|---------------------------------------|
+| `id`       | String \| Number                               | Yes      | Unique identifier of custom property. |
+| `value`    | CardPropertiesValues \| CardPropertiesValues[] | Yes      | Custom property values.               |
+
+
+
+
+
+### CardPropertiesValues
+
+| Field Name | Type                         | Required | Description                                 |
+|------------|------------------------------|----------|---------------------------------------------|
+| `id`       | String \| Number             | Yes      | Unique identifier of custom property value. |
+| `value`    | String \| Number \| DateTime | Yes`*`   | Custom property values.                     |
+
+`*` - if the value isn't `select` | `multi_select` | `people` then the value is required.   
+If the value type is `people` then you need to specify the users ids `["1cacf1a6-795b-4225-a2af-a9085a171c03", "d9fe2337-ecb8-4cdd-86c3-e83482f2f4b8"]`
 
 ### Example JSON Structure
 
@@ -608,7 +631,7 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 | Field Name | Type                 | Required | Description                                                    |
 |------------|----------------------|----------|----------------------------------------------------------------|
 | `id`       | String \| Number     | Yes      | Unique identifier of field. Max length 1024 chars              |
-| `type`     | String               | Yes      | Allowed types 'string','number','date','select','multi_select' |
+| `type`     | String               | Yes      | Allowed types `string`,`number`,`date`,`select`,`multi_select` |
 | `name`     | String               | Yes      | Name of field. Max length 128 chars                            |
 | `options`  | CustomFieldsObject[] | No       | Options of custom field                                        |
 
@@ -616,9 +639,9 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 ### Description
 
 - **id**: Unique identifier of custom field.
-- **type**: Defines the type of custom field, allowed types are string, number, date, select, multi_select.
+- **type**: Defines the allowed types of custom field.
 - **name**: Defines the name of custom field, used for display purposes.
-- **options**: Defines the available options for selected custom field type
+- **options**: Defines the available options for selected custom field type.
 
 ### Example JSON Structure
 
@@ -654,24 +677,18 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 
 ### CustomFieldsObject fields
 
-| Field Name   | Type                     | Required | Description                                                     |
-|--------------|--------------------------|----------|-----------------------------------------------------------------|
-| `id`         | String \| Number         | Yes      | Unique identifier of custom field option. Max length 1024 chars |
-| `value`      | string \| number \| DATE | Yes      | Value of custom field option  Max length 128 chars              |
-| `type`       | String                   | Yes      | Defines the type of custom field, see available options below   |
-| `name`       | String                   | Yes      | Defines the name of custom field, max length 128                |
-| `options`    | OPTION[]                 | No       | All variants for `select` \| `multi_select`                     |
-| `color`      | String                   | No       | Integer (1-16), based on color schema                           |
-| `sort_order` | Number                   | No       | Float sorting value                                             |
+| Field Name   | Type                         | Required | Description                                                     |
+|--------------|------------------------------|----------|-----------------------------------------------------------------|
+| `id`         | String \| Number             | Yes      | Unique identifier of custom field option. Max length 1024 chars |
+| `value`      | string \| number \| DateTime | Yes      | Value of custom field option. Max length 128 chars              |
+| `color`      | Number                       | No       | Integer (1-16), based on color schema                           |
+| `sort_order` | Number                       | No       | Float sorting value                                             |
 
 
 ### CustomFieldsObject Description
 
 - **id**: Unique identifier of custom field option
 - **value**: Value of custom field option
-- **type**: Available options of custom field type `string`, `number`, `date`, `select`, `multi_select`.
-- **name**: Defines the name of custom field.
-- **options**: The options of `select` or `multi-select`
 - **color**: An integer (1-16) that defines the selected color of custom property (in order that is displayed while selecting)
 - **sort_order**: The numberic value which defines the sort order.
 
@@ -686,4 +703,58 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
     "sort_order": 0
   }
 ]
+```
+
+## Meta data
+
+| Field Name           | Type   | Required | Description                        |
+|----------------------|--------|----------|------------------------------------|
+| `entities`           | Array  | Yes`*`   | Entities that should import        |
+| `entities_paths_map` | Object | Yes      | Path to json files for each entity |
+
+`*` - As mentioned at the top there are tree required entities - `boards`, `columns`, `cards`. The other entities aren't required.
+Meta data file name is - `meta-data.json`, this is the main file which contains the all meta data information.
+
+### Meta data Description
+
+- **entities**: Array of entities that should be mapped.
+- **entities_paths_map**: Paths to JSON files which should be the source of import.
+
+### Example JSON Structure
+
+```json
+{
+  "entities": [
+    "users",
+    "boards",
+    "columns",
+    "cards",
+    "customFields",
+    "comments",
+    "files"
+  ],
+  "entities_paths_map": {
+    "users": [
+      "users_0.json"
+    ],
+    "boards": [
+      "boards_0.json"
+    ],
+    "columns": [
+      "columns_0.json"
+    ],
+    "cards": [
+      "cards_0.json"
+    ],
+    "customFields": [
+      "customFields_0.json"
+    ],
+    "comments": [
+      "comments_0.json"
+    ],
+    "files": [
+      "files_0.json"
+    ]
+  }
+}
 ```
