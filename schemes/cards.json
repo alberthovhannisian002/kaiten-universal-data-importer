@@ -1,0 +1,448 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "description": "Unique identifier of card."
+      },
+      "owner_id": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "description": "Unique identifier of owner of card."
+      },
+      "responsible_id": {
+        "type": [
+          "string",
+          "number",
+          "null"
+        ],
+        "description": "Unique identifier of responsible of card."
+      },
+      "column_id": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "description": "Unique identifier of column in board."
+      },
+      "title": {
+        "type": "string",
+        "maxLength": 1024,
+        "description": "Title of card."
+      },
+      "description": {
+        "type": "string",
+        "description": "The description content of card."
+      },
+      "description_type": {
+        "type": "string",
+        "enum": [
+          "markdown",
+          "html"
+        ],
+        "description": "Defines the type of description."
+      },
+      "condition": {
+        "type": "number",
+        "enum": [
+          1,
+          2,
+          3
+        ],
+        "description": "Defines the current card status condition. Available values are - active (1), archived (2), deleted (3)."
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/CardTags"
+        },
+        "description": "Defines the tags of card."
+      },
+      "history": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/CardHistory"
+        },
+        "description": "Defines the card actions history."
+      },
+      "links": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/CardLinks"
+        },
+        "description": "Defines the links attached to card."
+      },
+      "completed_by": {
+        "type": [
+          "string",
+          "number",
+          "null"
+        ],
+        "description": "ID of user who completed the card."
+      },
+      "properties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/CardProperties"
+        },
+        "description": "Array of custom properties of card."
+      },
+      "due_date": {
+        "items": {
+          "$ref": "#/definitions/CardDateObject"
+        },
+        "description": "Due date of card."
+      },
+      "planned_start": {
+        "items": {
+          "$ref": "#/definitions/CardDateObject"
+        },
+        "description": "Planned start date of card."
+      },
+      "planned_end": {
+        "items": {
+          "$ref": "#/definitions/CardDateObject"
+        },
+        "description": "Planned end date of card."
+      },
+      "created": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "description": "Date of creation of card."
+      },
+      "checklists": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/CardChecklist"
+        },
+        "description": "The checklists of card."
+      },
+      "blocked_by_card_ids": {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "description": "IDs of cards which are blocking current card."
+      },
+      "blocks_card_ids": {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "description": "IDs of cards which are blocked because of current card."
+      },
+      "parent_card_ids": {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "description": "IDs of parent cards."
+      },
+      "child_card_ids": {
+        "type": "array",
+        "items": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "description": "IDs of child cards."
+      }
+    },
+    "required": [
+      "id",
+      "owner_id",
+      "column_id",
+      "title"
+    ],
+    "additionalProperties": true
+  },
+  "definitions": {
+    "CardTags": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "Unique identifier of card tag."
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Name of card tag."
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "CardHistory": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "card_move",
+            "card_due_date_change",
+            "card_tag_add",
+            "card_tag_remove",
+            "card_assign"
+          ],
+          "description": "Type of history action."
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "DateTime of history action."
+        },
+        "author_id": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "ID of author of action."
+        },
+        "old_value": {
+          "type": "object",
+          "description": "Object where is represented the old value that should be changed."
+        },
+        "new_value": {
+          "type": "object",
+          "description": "Object where is represented the new value."
+        },
+        "value": {
+          "type": "object",
+          "description": "If there is an old value you should send value object with new values that should be applied."
+        }
+      },
+      "required": [
+        "type",
+        "created",
+        "author_id"
+      ],
+      "additionalProperties": false
+    },
+    "CardLinks": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "maxLength": 16384,
+          "description": "The URL of resource that should be displayed."
+        },
+        "description": {
+          "type": "string",
+          "description": "String description of card link."
+        },
+        "created": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "format": "date-time"
+            }
+          ],
+          "description": "DateTime of adding card link."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    "CardChecklist": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 1024,
+          "description": "Name of checklist."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ChecklistItem"
+          },
+          "description": "Array of checklist items."
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "DateTime of creation checklist."
+        },
+        "due_date": {
+          "items": {
+            "$ref": "#/definitions/ChecklistDateObject"
+          },
+          "description": "Due date of checklist."
+        },
+        "planned_start": {
+          "items": {
+            "$ref": "#/definitions/ChecklistDateObject"
+          },
+          "description": "Date of planned start of checklist."
+        },
+        "planned_end": {
+          "items": {
+            "$ref": "#/definitions/ChecklistDateObject"
+          },
+          "description": "Date of planned end of checklist."
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChecklistItem": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Text description of checklist item."
+        },
+        "sort_order": {
+          "type": "number",
+          "description": "Order of checklist item in checklist."
+        },
+        "checked": {
+          "type": "boolean",
+          "description": "If true checklist is marked as done."
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "DateTime of creation checklist item."
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "DateTime when checklist item was checked."
+        },
+        "checked_by": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "ID of user who checked the checklist item."
+        },
+        "created_by": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "ID of user who created the checklist item."
+        },
+        "due_date": {
+          "items": {
+            "$ref": "#/definitions/ChecklistDateObject"
+          },
+          "description": "Due date of checklist item."
+        },
+        "responsible_id": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "ID of user who is responsible for checklist item."
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "ChecklistDateObject": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Date value."
+        },
+        "time_present": {
+          "type": "boolean",
+          "description": "Boolean value that defines if `value` contains only date or time also."
+        }
+      },
+      "additionalProperties": false
+    },
+    "CardProperties": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "Unique identifier of custom property."
+        },
+        "value": {
+          "type": [
+            "string",
+            "number",
+            "array",
+            "null"
+          ],
+          "description": "Custom property values."
+        }
+      },
+      "required": [
+        "id",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "CardDateObject": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Date value."
+        },
+        "time_present": {
+          "type": "boolean",
+          "description": "Boolean value that defines if `value` contains only date or time also."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

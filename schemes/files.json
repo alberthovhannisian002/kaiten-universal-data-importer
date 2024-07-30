@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique identifier for the card file."
+      },
+      "card_id": {
+        "type": "string",
+        "description": "Unique identifier of card."
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of card file."
+      },
+      "author_id": {
+        "type": "string",
+        "description": "Unique identifier of author of file."
+      },
+      "created": {
+        "type": ["null", "string"],
+        "format": "date-time",
+        "description": "Date of upload of card file"
+      },
+      "external": {
+        "type": "boolean",
+        "description": "Boolean value which specifying if the storage is external or not"
+      },
+      "external_type": {
+        "type": "string",
+        "description": "String which represents external storage type"
+      },
+      "external_url": {
+        "type": "string",
+        "format": "uri",
+        "description": "URL of external storage file"
+      },
+      "size": {
+        "type": "number",
+        "description": "Size of card file"
+      }
+    },
+    "required": ["id", "card_id", "name"],
+    "additionalProperties": false
+  },
+  "if": {
+    "properties": { "external": { "const": true } }
+  },
+  "then": {
+    "required": ["external_type", "external_url"]
+  }
+}

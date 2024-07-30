@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": ["string", "number"],
+        "description": "Unique identifier of the board."
+      },
+      "title": {
+        "type": "string",
+        "maxLength": 128,
+        "description": "Name of the board."
+      },
+      "author_id": {
+        "type": "string",
+        "description": "Unique identifier of author of board."
+      },
+      "created": {
+        "anyOf": [
+          { "type": "null" },
+          { "type": "string", "format": "date-time" }
+        ],
+        "description": "Date of creation of board."
+      }
+    },
+    "required": ["id", "title"],
+    "additionalProperties": false
+  }
+}

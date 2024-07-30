@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": ["string", "number"],
+        "description": "Unique identifier of comment."
+      },
+      "card_id": {
+        "type": ["string", "number"],
+        "description": "Unique identifier of card under which the comment is written."
+      },
+      "text": {
+        "type": "string",
+        "description": "Content of comment."
+      },
+      "author_name": {
+        "type": "string",
+        "description": "Full name of comment author."
+      },
+      "author_id": {
+        "type": ["string", "number"],
+        "description": "Unique identifier of comment author."
+      },
+      "created": {
+        "anyOf": [
+          { "type": "null" },
+          { "type": "string", "format": "date-time" }
+        ],
+        "description": "Date of creation of comment."
+      }
+    },
+    "required": ["id", "card_id", "text"],
+    "additionalProperties": false
+  }
+}
