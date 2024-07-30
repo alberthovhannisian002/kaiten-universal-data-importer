@@ -73,7 +73,7 @@ Description of importing process: Validates json data, if there are no validatio
 | `id`        | String \| Number | Yes      | Unique identifier of the board.       |
 | `title`     | String           | Yes      | Name of the board.  Max 128 char      |
 | `author_id` | String           | No       | Unique identifier of author of board. |
-| `created`   | Null or DateTime | No       | Date of creation of board             |
+| `created`   | Null or DateTime | No       | Date of creation of board.            |
 
 
 ### Description
@@ -103,10 +103,10 @@ Description of importing process: Validates json data, if there are no validatio
 | Field Name   | Type             | Required | Description                           |
 |--------------|------------------|----------|---------------------------------------|
 | `id`         | String \| Number | Yes      | Unique identifier of column in board. |
-| `title`      | String           | Yes      | Name of column.                       |
+| `title`      | String           | Yes      | Name of column. Max 128 chars.        |
 | `board_id`   | String \| Number | Yes      | Unique identifier of board.           |
-| `sort_order` | Number           | No       | Order sequence number                 |
-| `type`       | Number           | No       | Sets up column type                   |
+| `sort_order` | Number           | No       | Order sequence number.                |
+| `type`       | Number           | No       | Sets up column type.                  |
 | `created`    | Null or DateTime | No       | Date of creation of column            |
 
 ### Description
@@ -151,7 +151,7 @@ Description of importing process: Validates json data, if there are no validatio
 | `owner_id`            | String \| Number        | Yes      | Unique identifier of owner of card.                    |
 | `responsible_id`      | String \| Number        | No       | Unique identifier of responsible of card.              |
 | `column_id`           | String \| Number        | Yes      | Unique identifier of column in board.                  |
-| `title`               | String                  | Yes      | Title of card.  Max length 1024 chars                  |
+| `title`               | String                  | Yes      | Title of card. Max length 1024 chars                   |
 | `description`         | String                  | No       | The description content of card                        |
 | `description_type`    | String                  | No       | Defines the type of description.                       |
 | `condition`           | Number                  | No       | Defines the current card status condition.             |
@@ -160,9 +160,9 @@ Description of importing process: Validates json data, if there are no validatio
 | `links`               | CardLinks[]             | No       | Defines the links attached to card.                    |
 | `completed_by`        | String \| Number        | No       | ID of user who completed the card.                     |
 | `properties`          | CardProperties[]        | No       | Array of custom properties of card.                    |
-| `due_date`            | Null or Date            | No       | Due date of card.                                      |
-| `planned_start`       | Null or Date            | No       | Planned start date of card.                            |
-| `planned_end`         | Null or Date            | No       | Planned end date of card.                              |
+| `due_date`            | Null or CardDateObject  | No       | Due date of card.                                      |
+| `planned_start`       | Null or CardDateObject  | No       | Planned start date of card.                            |
+| `planned_end`         | Null or CardDateObject  | No       | Planned end date of card.                              |
 | `created`             | Null or DateTime string | No       | Date of creation of card .                             |
 | `checklists`          | CardChecklist[]         | No       | The checklists of card.                                |
 | `blocked_by_card_ids` | Array                   | No       | IDs of cards which are blocking current card.          |
@@ -175,7 +175,7 @@ Description of importing process: Validates json data, if there are no validatio
 - **id**: A unique identifier of card, which is used to map and track the card within our system.
 - **title**: The complete title of card, used for display purposes.
 - **owner_id**: Unique identifier of owner of card, used to create relations and display purposes.
-- **responsible_id**: Unique identifier of responsible of card, used to create relations and display purposes
+- **responsible_id**: Unique identifier of responsible for card, used to create relations and display purposes
 - **column_id**: Unique identifier of column in which the card is placed.
 - **description**: The content description of card.
 - **description_type**: The type of description, available values are markdown and html.
@@ -186,8 +186,8 @@ Description of importing process: Validates json data, if there are no validatio
 - **completed_by**: ID of user who completed the card.
 - **properties**: Array of custom properties available for current card.
 - **due_date**: Due date of card.
-- **planned_start**: Planned start date of card.
-- **planned_end**: Planned end date of card.
+- **planned_start**: Planned start date of card, used for display purposes, visible in Timeline section.
+- **planned_end**: Planned end date of card, used for display purposes, visible in Timeline section.
 - **blocked_by_card_ids**: Array of card ids which are blocking the current card. 
 - **blocks_card_ids**: Array of card ids which are blocked because of current card.
 - **parent_card_ids**: Array of parent card ids. 
@@ -196,24 +196,22 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CardProperties fields
 
-| Field Name | Type                                           | Required | Description                           |
-|------------|------------------------------------------------|----------|---------------------------------------|
-| `id`       | String \| Number                               | Yes      | Unique identifier of custom property. |
-| `value`    | CardPropertiesValues \| CardPropertiesValues[] | Yes      | Custom property values.               |
-
-
-
-
-
-### CardPropertiesValues
-
-| Field Name | Type                         | Required | Description                                 |
-|------------|------------------------------|----------|---------------------------------------------|
-| `id`       | String \| Number             | Yes      | Unique identifier of custom property value. |
-| `value`    | String \| Number \| DateTime | Yes`*`   | Custom property values.                     |
+| Field Name | Type                              | Required | Description                           |
+|------------|-----------------------------------|----------|---------------------------------------|
+| `id`       | String \| Number                  | Yes      | Unique identifier of custom property. |
+| `value`    | String \| Number \| Date \| Array | Yes      | Custom property values.               |
 
 `*` - if the value isn't `select` | `multi_select` | `people` then the value is required.   
-If the value type is `people` then you need to specify the users ids `["1cacf1a6-795b-4225-a2af-a9085a171c03", "d9fe2337-ecb8-4cdd-86c3-e83482f2f4b8"]`
+If the value custom property type is `people` then you need to specify the users ids `["1cacf1a6-795b-4225-a2af-a9085a171c03", "d9fe2337-ecb8-4cdd-86c3-e83482f2f4b8"]`
+
+### CardDateObject
+
+| Field Name     | Type             | Required | Description                                                            |
+|----------------|------------------|----------|------------------------------------------------------------------------|
+| `value`        | Date \| DateTime | No       | Date value .                                                           |
+| `time_present` | Boolean          | No       | Boolean value that defines if `value` contains only date or time also. |
+
+If the value includes time (DateTime) so `time_present` parameter should be set to true
 
 ### Example JSON Structure
 
@@ -261,52 +259,32 @@ If the value type is `people` then you need to specify the users ids `["1cacf1a6
         "completed": false,
         "completed_by": null,
         "completed_at": null,
-        "properties": [
+        "properties":  [
             {
-                "id": "1207864637859350",
-                "value": {
-                    "id": "1207864637859351",
-                    "value": "Low",
-                    "color": 8
-                }
+              "id": "1207888014064892",
+              "value": "Text example"
             },
             {
-                "id": "1207864637859355",
-                "value": {
-                    "id": "1207864637859357",
-                    "value": "At risk",
-                    "color": 12
-                }
+              "id": "1207888014064899",
+              "value": 123.456
             },
             {
-                "id": "1207864637859405",
-                "value": [
-                    {
-                        "id": "1207864778999507",
-                        "value": "k333dg+3@gmail.com"
-                    },
-                    {
-                        "id": "1207864780759883",
-                        "value": "k333dg+4@gmail.com"
-                    }
-                ]
+              "id": "1207914037042113",
+              "value": "2024-07-17"
             },
             {
-                "id": "1207864637859408",
-                "value": [
-                    {
-                        "id": "1207864637859409",
-                        "value": "Yellow",
-                        "color": 12
-                    },
-                    {
-                        "id": "1207864637859410",
-                        "value": "Blue",
-                        "color": 6
-                    }
-                ]
+              "id": "1207645766223465",
+              "value": ["1207221263311709", "1207221341939584"]
+            },
+            {
+              "id": "1207631614467241",
+              "value": ["1207631614467242"]
+            },
+            {
+              "id": "1207723749200577",
+              "value": ["1207723749200601", "1207723749200612"]
             }
-        ],
+       ],
         "due_date": {
             "value": "2024-07-24",
             "time_present": false
@@ -436,10 +414,10 @@ If the value type is `people` then you need to specify the users ids `["1cacf1a6
 
 ### CardTags fields
 
-| Field Name | Type             | Required | Description                           |
-|------------|------------------|----------|---------------------------------------|
-| `id`       | String \| Number | Yes      | Unique identifier of card tag.        |
-| `name`     | String           | Yes      | Name of card tag. Maxlength 128 chars |
+| Field Name | Type             | Required | Description                     |
+|------------|------------------|----------|---------------------------------|
+| `id`       | String \| Number | Yes      | Unique identifier of card tag.  |
+| `name`     | String           | Yes      | Name of card tag. Max 128 chars |
 
 ```json
 {
@@ -475,11 +453,11 @@ If the value type is `people` then you need to specify the users ids `["1cacf1a6
 
 ### CardLinks fields
 
-| Field Name    | Type                    | Required | Description                                                          |
-|---------------|-------------------------|----------|----------------------------------------------------------------------|
-| `url`         | String \| Number        | Yes      | The URL of resource that should be displayed. Max length 16384 chars |
-| `description` | String                  | No       | String description of card link.                                     |
-| `created`     | DateTime string or Null | No       | DateTime of adding card link.                                        |
+| Field Name    | Type                    | Required | Description                                                   |
+|---------------|-------------------------|----------|---------------------------------------------------------------|
+| `url`         | String \| Number        | Yes      | The URL of resource that should be displayed. Max 16384 chars |
+| `description` | String                  | No       | String description of card link.                              |
+| `created`     | DateTime string or Null | No       | DateTime of adding card link.                                 |
 
 ```json
 {
@@ -493,7 +471,7 @@ If the value type is `people` then you need to specify the users ids `["1cacf1a6
 
 | Field Name      | Type                | Required | Description                         |
 |-----------------|---------------------|----------|-------------------------------------|
-| `name`          | String              | No       | Name of checklist.                  |
+| `name`          | String              | No       | Name of checklist. Max 1024 chars.  |
 | `items`         | ChecklistItem[]     | No       | Array of checklist items.           |
 | `created`       | DateTime string     | No       | DateTime of creation checklist.     |
 | `due_date`      | ChecklistDateObject | No       | Due date of checklist.              |
@@ -517,7 +495,6 @@ If the value type is `people` then you need to specify the users ids `["1cacf1a6
 
 
 ### ChecklistDateObject
-
 
 | Field Name     | Type             | Required | Description                                                            |
 |----------------|------------------|----------|------------------------------------------------------------------------|
@@ -573,18 +550,19 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 
 ### Fields
 
-| Field Name      | Type         | Required | Description                                                       |
-|-----------------|--------------|----------|-------------------------------------------------------------------|
-| `id`            | String       | Yes      | Unique identifier for the card file.                              |
-| `card_id`       | String       | Yes      | Unique identifier of card.                                        |
-| `name`          | String       | Yes      | Name of card file.                                                |
-| `author_id`     | String       | No       | Unique identifier of author of file.                              |
-| `created`       | Null or Date | No       | Date of upload of card file                                       |
-| `external`      | Boolean      | No       | Boolean value which specifiying if the storage is external or not |
-| `external_type` | String       | No       | String which represents external storage type                     |
-| `external_url`  | String       | No       | URL of external storage file                                      |
-| `size`          | Number       | No       | Size of card file                                                 |
+| Field Name      | Type         | Required | Description                                                      |
+|-----------------|--------------|----------|------------------------------------------------------------------|
+| `id`            | String       | Yes      | Unique identifier for the card file.                             |
+| `card_id`       | String       | Yes      | Unique identifier of card.                                       |
+| `name`          | String       | Yes      | Name of card file.                                               |
+| `author_id`     | String       | No       | Unique identifier of author of file.                             |
+| `created`       | Null or Date | No       | Date of upload of card file                                      |
+| `external`      | Boolean      | No       | Boolean value which specifying if the storage is external or not |
+| `external_type` | String       | No`*`    | String which represents external storage type                    |
+| `external_url`  | String       | No`*`    | URL of external storage file                                     |
+| `size`          | Number       | No       | Size of card file                                                |
 
+`*` - if `external` property is set to `true`, then `external_type` and `external_url` should be present also.
 
 ### Description
 
@@ -594,7 +572,7 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 - **author_id**: ID of author of the attached file.
 - **created**: Date of uploading card file.
 - **external**: Defines if the file is from external or internal storage.
-- **external_type**: Defines external storage type, available options are: gdrive, dropbox, asana.
+- **external_type**: Defines external storage type, available options are: gdrive, dropbox.
 - **external_url**: Defines url of external storage file.
 
 ### Example JSON Structure
@@ -690,7 +668,7 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 - **id**: Unique identifier of custom field option
 - **value**: Value of custom field option
 - **color**: An integer (1-16) that defines the selected color of custom property (in order that is displayed while selecting)
-- **sort_order**: The numberic value which defines the sort order.
+- **sort_order**: The numeric value which defines the sort order.
 
 ### Example JSON Structure
 
