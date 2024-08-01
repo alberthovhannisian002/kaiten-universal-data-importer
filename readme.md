@@ -196,22 +196,14 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CardProperties fields
 
-| Field Name | Type                              | Required | Description                           |
-|------------|-----------------------------------|----------|---------------------------------------|
-| `id`       | String \| Number                  | Yes      | Unique identifier of custom property. |
-| `value`    | String \| Number \| Date \| Array | Yes      | Custom property values.               |
+| Field Name | Type                                         | Required | Description                           |
+|------------|----------------------------------------------|----------|---------------------------------------|
+| `id`       | String \| Number                             | Yes      | Unique identifier of custom property. |
+| `value`    | String \| Number \| Date \| DateTime \| ID[] | Yes      | Custom property values.               |
 
-`*` - if the value isn't `select` | `multi_select` | `people` then the value is required.   
-If the value custom property type is `people` then you need to specify the users ids `["1cacf1a6-795b-4225-a2af-a9085a171c03", "d9fe2337-ecb8-4cdd-86c3-e83482f2f4b8"]`
-
-### CardDateObject
-
-| Field Name     | Type             | Required | Description                                                            |
-|----------------|------------------|----------|------------------------------------------------------------------------|
-| `value`        | Date \| DateTime | No       | Date value .                                                           |
-| `time_present` | Boolean          | No       | Boolean value that defines if `value` contains only date or time also. |
-
-If the value includes time (DateTime) so `time_present` parameter should be set to true
+Custom property ID must exist or be included in the current import (custom fields data).
+If type of the value is `select` | `multi_select` | `people` then the value is array of IDs.
+Custom property value ID must exist or be included in the current import (custom fields data or users data).
 
 ### Example JSON Structure
 
@@ -521,7 +513,7 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 | `id`       | String \| Number     | Yes      | Unique identifier of field. Max length 1024 chars              |
 | `type`     | String               | Yes      | Allowed types `string`,`number`,`date`,`select`,`multi_select` |
 | `name`     | String               | Yes      | Name of field. Max length 128 chars                            |
-| `options`  | CustomFieldsObject[] | No       | Options of custom field                                        |
+| `options`  | CustomFieldOption[] | No       | Options of custom field                                        |
 
 
 ### Description
@@ -563,21 +555,21 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 ]
 ```
 
-### CustomFieldsObject fields
+### CustomFieldOption fields
 
-| Field Name   | Type                         | Required | Description                                                     |
-|--------------|------------------------------|----------|-----------------------------------------------------------------|
-| `id`         | String \| Number             | Yes      | Unique identifier of custom field option. Max length 1024 chars |
-| `value`      | string \| number \| DateTime | Yes      | Value of custom field option. Max length 128 chars              |
-| `color`      | Number                       | No       | Integer (1-16), based on color schema                           |
-| `sort_order` | Number                       | No       | Float sorting value                                             |
+| Field Name   | Type                                 | Required | Description                                                      |
+|--------------|--------------------------------------|----------|------------------------------------------------------------------|
+| `id`         | String \| Number                     | Yes      | Unique identifier of custom field option. Max length 1024 chars. |
+| `value`      | String \| Number \| Date \| DateTime | Yes      | Value of custom field option. Max length 128 chars.              |
+| `color`      | Number                               | No       | Integer (1-17), based on color scheme.                           |
+| `sort_order` | Number                               | No       | Float sorting value.                                             |
 
 
-### CustomFieldsObject Description
+### CustomFieldOption Description
 
-- **id**: Unique identifier of custom field option
-- **value**: Value of custom field option
-- **color**: An integer (1-16) that defines the selected color of custom property (in order that is displayed while selecting)
+- **id**: Unique identifier of custom field option.
+- **value**: Value of custom field option.
+- **color**: An integer (1-17) that defines the selected color of custom property.
 - **sort_order**: The numeric value which defines the sort order.
 
 ### Example JSON Structure
@@ -588,9 +580,51 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
     "id": "1207864637859351",
     "value": "Low",
     "color": 8,
-    "sort_order": 0
+    "sort_order": 1.5
   }
 ]
+```
+
+### Color Scheme
+
+| ID  | Name        |
+|-----|-------------|
+| 1   | Red         |
+| 2   | Pink        |
+| 3   | Purple      |
+| 4   | Deep purple |
+| 5   | Indigo      |
+| 6   | Blue        |
+| 7   | Light blue  |
+| 8   | Cyan        |
+| 9   | Teal        |
+| 10  | Green       |
+| 11  | Light green |
+| 12  | Lime        |
+| 13  | Orange      |
+| 14  | Deep orange |
+| 15  | Brown       |
+| 16  | Blue grey   |
+| 17  | Yellow      |
+
+
+## Properties Mapping Data
+
+Collection of ID and Kaiten ID mappings
+
+### Example JSON Structure
+```json
+  [
+    {
+        "1207864637859350": 14
+    },
+    {
+        "1207864637859355": 14
+    },
+    {
+        "1207864637859408": 16
+    }
+  ]
 ```
 
 ## Meta data
@@ -617,7 +651,8 @@ Meta data file name is - `meta-data.json`, this is the main file which contains 
     "boards",
     "columns",
     "cards",
-    "customFields",
+    "custom_fields",
+    "properties_mapping",
     "comments",
     "files"
   ],
@@ -634,8 +669,11 @@ Meta data file name is - `meta-data.json`, this is the main file which contains 
     "cards": [
       "cards_0.json"
     ],
-    "customFields": [
-      "customFields_0.json"
+    "custom_fields": [
+      "custom_fields_0.json"
+    ],
+    "properties_mapping": [
+      "properties_mapping_0.json"
     ],
     "comments": [
       "comments_0.json"
