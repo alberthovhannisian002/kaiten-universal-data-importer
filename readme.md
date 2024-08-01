@@ -608,6 +608,25 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 | 17  | Yellow      |
 
 
+## Properties Mapping Data
+
+Collection of ID and Kaiten ID mappings
+
+### Example JSON Structure
+```json
+  [
+    {
+        "1207864637859350": 14
+    },
+    {
+        "1207864637859355": 14
+    },
+    {
+        "1207864637859408": 16
+    }
+  ]
+```
+
 ## Meta data
 
 | Field Name           | Type   | Required | Description                        |
@@ -632,7 +651,8 @@ Meta data file name is - `meta-data.json`, this is the main file which contains 
     "boards",
     "columns",
     "cards",
-    "customFields",
+    "custom_fields",
+    "properties_mapping",
     "comments",
     "files"
   ],
@@ -649,8 +669,11 @@ Meta data file name is - `meta-data.json`, this is the main file which contains 
     "cards": [
       "cards_0.json"
     ],
-    "customFields": [
-      "customFields_0.json"
+    "custom_gields": [
+      "custom_fields_0.json"
+    ],
+    "properties_mapping": [
+      "properties_mapping_0.json"
     ],
     "comments": [
       "comments_0.json"
