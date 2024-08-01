@@ -199,7 +199,7 @@ Description of importing process: Validates json data, if there are no validatio
 | Field Name | Type                                         | Required | Description                           |
 |------------|----------------------------------------------|----------|---------------------------------------|
 | `id`       | String \| Number                             | Yes      | Unique identifier of custom property. |
-| `value`    | String \| Number \| Date \| DateTime \| Id[] | Yes      | Custom property values.               |
+| `value`    | String \| Number \| Date \| DateTime \| ID[] | Yes      | Custom property values.               |
 
 Custom property ID must exist or be included in the current import (custom fields data).
 If type of the value is `select` | `multi_select` | `people` then the value is array of IDs.
@@ -557,12 +557,12 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 
 ### CustomFieldsObject fields
 
-| Field Name   | Type                         | Required | Description                                                     |
-|--------------|------------------------------|----------|-----------------------------------------------------------------|
-| `id`         | String \| Number             | Yes      | Unique identifier of custom field option. Max length 1024 chars |
-| `value`      | string \| number \| DateTime | Yes      | Value of custom field option. Max length 128 chars              |
-| `color`      | Number                       | No       | Integer (1-16), based on color schema                           |
-| `sort_order` | Number                       | No       | Float sorting value                                             |
+| Field Name   | Type                                 | Required | Description                                                      |
+|--------------|--------------------------------------|----------|------------------------------------------------------------------|
+| `id`         | String \| Number                     | Yes      | Unique identifier of custom field option. Max length 1024 chars. |
+| `value`      | String \| Number \| Date \| DateTime | Yes      | Value of custom field option. Max length 128 chars.              |
+| `color`      | Number                               | No       | Integer (1-17), based on color scheme.                           |
+| `sort_order` | Number                               | No       | Float sorting value.                                             |
 
 
 ### CustomFieldsObject Description
@@ -584,6 +584,10 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
   }
 ]
 ```
+
+### Color Scheme
+
+
 
 ## Meta data
 
