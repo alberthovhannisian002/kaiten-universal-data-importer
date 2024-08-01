@@ -669,7 +669,7 @@ Meta data file name is - `meta-data.json`, this is the main file which contains 
     "cards": [
       "cards_0.json"
     ],
-    "custom_gields": [
+    "custom_fields": [
       "custom_fields_0.json"
     ],
     "properties_mapping": [
