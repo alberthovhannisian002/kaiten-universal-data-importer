@@ -34,7 +34,6 @@
         "description": "Date of creation of column."
       }
     },
-    "required": ["id", "title", "board_id"],
-    "additionalProperties": false
+    "required": ["id", "title", "board_id"]
   }
 }

@@ -22,7 +22,6 @@
         "description": "Username."
       }
     },
-    "required": ["id", "email"],
-    "additionalProperties": false
+    "required": ["id", "email"]
   }
 }

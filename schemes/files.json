@@ -43,8 +43,7 @@
         "description": "Size of card file"
       }
     },
-    "required": ["id", "card_id", "name"],
-    "additionalProperties": false
+    "required": ["id", "card_id", "name"]
   },
   "if": {
     "properties": { "external": { "const": true } }

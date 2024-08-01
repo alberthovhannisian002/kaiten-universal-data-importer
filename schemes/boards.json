@@ -14,7 +14,7 @@
         "description": "Name of the board."
       },
       "author_id": {
-        "type": "string",
+        "type": ["string", "number"],
         "description": "Unique identifier of author of board."
       },
       "created": {
@@ -25,7 +25,6 @@
         "description": "Date of creation of board."
       }
     },
-    "required": ["id", "title"],
-    "additionalProperties": false
+    "required": ["id", "title"]
   }
 }

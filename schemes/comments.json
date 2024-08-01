@@ -32,7 +32,6 @@
         "description": "Date of creation of comment."
       }
     },
-    "required": ["id", "card_id", "text"],
-    "additionalProperties": false
+    "required": ["id", "card_id", "text"]
   }
 }

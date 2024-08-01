@@ -72,7 +72,7 @@ Description of importing process: Validates json data, if there are no validatio
 |-------------|------------------|----------|---------------------------------------|
 | `id`        | String \| Number | Yes      | Unique identifier of the board.       |
 | `title`     | String           | Yes      | Name of the board.  Max 128 char      |
-| `author_id` | String           | No       | Unique identifier of author of board. |
+| `author_id` | String \| Number | No       | Unique identifier of author of board. |
 | `created`   | Null or DateTime | No       | Date of creation of board.            |
 
 
@@ -148,7 +148,7 @@ Description of importing process: Validates json data, if there are no validatio
 | Field Name            | Type                    | Required | Description                                            |
 |-----------------------|-------------------------|----------|--------------------------------------------------------|
 | `id`                  | String \| Number        | Yes      | Unique identifier of card.                             |
-| `owner_id`            | String \| Number        | Yes      | Unique identifier of owner of card.                    |
+| `owner_id`            | String \| Number        | No       | Unique identifier of owner of card.                    |
 | `responsible_id`      | String \| Number        | No       | Unique identifier of responsible of card.              |
 | `column_id`           | String \| Number        | Yes      | Unique identifier of column in board.                  |
 | `title`               | String                  | Yes      | Title of card. Max length 1024 chars                   |
@@ -342,14 +342,14 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 
 ### CardHistory fields
 
-| Field Name  | Type             | Required | Description                                                                                                                        |
-|-------------|------------------|----------|------------------------------------------------------------------------------------------------------------------------------------|
-| `type`      | String           | Yes      | Type of history action, available values - `card_move`, `card_due_date_change`, `card_tag_add`, `card_tag_remove`, `card_assign` . |
-| `created`   | DateTime         | Yes      | DateTime of history action.                                                                                                        |
-| `author_id` | String \| Number | Yes      | ID of author of action.                                                                                                            |
-| `old_value` | Object           | No       | Object where is represented the old value that should be changed.                                                                  |
-| `new_value` | Object           | No       | Object where is represented the new value.                                                                                         |
-| `value`     | Object           | No       | If there is an old value you should send value object with new values that should be applied.                                      |
+| Field Name  | Type             | Required | Description                                                                                   |
+|-------------|------------------|----------|-----------------------------------------------------------------------------------------------|
+| `type`      | String           | Yes      | Type of history action, available value - `card_move`                                         |
+| `created`   | DateTime         | Yes      | DateTime of history action.                                                                   |
+| `author_id` | String \| Number | Yes      | ID of author of action.                                                                       |
+| `old_value` | Object           | No       | Object where is represented the old value that should be changed.                             |
+| `new_value` | Object           | No       | Object where is represented the new value.                                                    |
+| `value`     | Object           | No       | If there is an old value you should send value object with new values that should be applied. |
 
 ```json
 {

@@ -38,12 +38,10 @@
               "type": "number"
             }
           },
-          "required": ["id", "value"],
-          "additionalProperties": false
+          "required": ["id", "value"]
         }
       }
     },
-    "required": ["id", "type", "name"],
-    "additionalProperties": true
+    "required": ["id", "type", "name"]
   }
 }
