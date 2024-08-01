@@ -196,22 +196,14 @@ Description of importing process: Validates json data, if there are no validatio
 
 ### CardProperties fields
 
-| Field Name | Type                              | Required | Description                           |
-|------------|-----------------------------------|----------|---------------------------------------|
-| `id`       | String \| Number                  | Yes      | Unique identifier of custom property. |
-| `value`    | String \| Number \| Date \| Array | Yes      | Custom property values.               |
+| Field Name | Type                                         | Required | Description                           |
+|------------|----------------------------------------------|----------|---------------------------------------|
+| `id`       | String \| Number                             | Yes      | Unique identifier of custom property. |
+| `value`    | String \| Number \| Date \| DateTime \| Id[] | Yes      | Custom property values.               |
 
-`*` - if the value isn't `select` | `multi_select` | `people` then the value is required.   
-If the value custom property type is `people` then you need to specify the users ids `["1cacf1a6-795b-4225-a2af-a9085a171c03", "d9fe2337-ecb8-4cdd-86c3-e83482f2f4b8"]`
-
-### CardDateObject
-
-| Field Name     | Type             | Required | Description                                                            |
-|----------------|------------------|----------|------------------------------------------------------------------------|
-| `value`        | Date \| DateTime | No       | Date value .                                                           |
-| `time_present` | Boolean          | No       | Boolean value that defines if `value` contains only date or time also. |
-
-If the value includes time (DateTime) so `time_present` parameter should be set to true
+Custom property ID must exist or be included in the current import (custom fields data).
+If type of the value is `select` | `multi_select` | `people` then the value is array of IDs.
+Custom property value ID must exist or be included in the current import (custom fields data or users data).
 
 ### Example JSON Structure
 
