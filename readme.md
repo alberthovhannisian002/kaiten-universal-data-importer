@@ -513,7 +513,7 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 | `id`       | String \| Number     | Yes      | Unique identifier of field. Max length 1024 chars              |
 | `type`     | String               | Yes      | Allowed types `string`,`number`,`date`,`select`,`multi_select` |
 | `name`     | String               | Yes      | Name of field. Max length 128 chars                            |
-| `options`  | CustomFieldsObject[] | No       | Options of custom field                                        |
+| `options`  | CustomFieldOption[] | No       | Options of custom field                                        |
 
 
 ### Description
@@ -555,7 +555,7 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 ]
 ```
 
-### CustomFieldsObject fields
+### CustomFieldOption fields
 
 | Field Name   | Type                                 | Required | Description                                                      |
 |--------------|--------------------------------------|----------|------------------------------------------------------------------|
@@ -565,11 +565,11 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 | `sort_order` | Number                               | No       | Float sorting value.                                             |
 
 
-### CustomFieldsObject Description
+### CustomFieldOption Description
 
-- **id**: Unique identifier of custom field option
-- **value**: Value of custom field option
-- **color**: An integer (1-16) that defines the selected color of custom property (in order that is displayed while selecting)
+- **id**: Unique identifier of custom field option.
+- **value**: Value of custom field option.
+- **color**: An integer (1-17) that defines the selected color of custom property.
 - **sort_order**: The numeric value which defines the sort order.
 
 ### Example JSON Structure
@@ -580,13 +580,32 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
     "id": "1207864637859351",
     "value": "Low",
     "color": 8,
-    "sort_order": 0
+    "sort_order": 1.5
   }
 ]
 ```
 
 ### Color Scheme
 
+| ID  | Name        |
+|-----|-------------|
+| 1   | Red         |
+| 2   | Pink        |
+| 3   | Purple      |
+| 4   | Deep purple |
+| 5   | Indigo      |
+| 6   | Blue        |
+| 7   | Light blue  |
+| 8   | Cyan        |
+| 9   | Teal        |
+| 10  | Green       |
+| 11  | Light green |
+| 12  | Lime        |
+| 13  | Orange      |
+| 14  | Deep orange |
+| 15  | Brown       |
+| 16  | Blue grey   |
+| 17  | Yellow      |
 
 
 ## Meta data
