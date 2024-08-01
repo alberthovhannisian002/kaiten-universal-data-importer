@@ -287,29 +287,6 @@
             "$ref": "#/definitions/ChecklistItem"
           },
           "description": "Array of checklist items."
-        },
-        "created": {
-          "type": "string",
-          "format": "date-time",
-          "description": "DateTime of creation checklist."
-        },
-        "due_date": {
-          "items": {
-            "$ref": "#/definitions/ChecklistDateObject"
-          },
-          "description": "Due date of checklist."
-        },
-        "planned_start": {
-          "items": {
-            "$ref": "#/definitions/ChecklistDateObject"
-          },
-          "description": "Date of planned start of checklist."
-        },
-        "planned_end": {
-          "items": {
-            "$ref": "#/definitions/ChecklistDateObject"
-          },
-          "description": "Date of planned end of checklist."
         }
       }
     },
