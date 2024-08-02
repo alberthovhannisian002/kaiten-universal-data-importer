@@ -17,7 +17,7 @@ This document outlines the required fields and their descriptions for importing 
 
 ## Introduction
 
-This specification defines the structure and required fields for importing data from task management tools like Asana, Jira, Trello, etc. The goal is to ensure that the imported data can be processed correctly and integrated into our system.
+This specification defines the structure and required fields for importing data from other task management tools into Kaiten. The goal is to ensure that the imported data can be processed correctly and integrated into our system.
 
 ## General Requirements
 
@@ -28,14 +28,14 @@ This specification defines the structure and required fields for importing data 
 
 ## Getting started - Metadata file
 
-To perform the import, you need to have a `meta-data.json` file, which serves as the entry file. This JSON file should contain the entities to be imported and the paths to separate JSON files for each entity. Below is the structure of the `meta-data.json` file along with an examples.
+To perform the import, you need to have a `meta-data.json` file, which serves as the entry file. This JSON file should contain the entities to be imported and the relative paths to separate JSON files for each entity. Below is the structure of the `meta-data.json` file along with an examples.
 
 ### - Fields
 
-| Field Name           | Type   | Required | Description                                  |
-|----------------------|--------|----------|----------------------------------------------|
-| `entities`           | Array  | Yes`*`   | Entities to be imported                      |
-| `entities_paths_map` | Object | Yes      | Paths to separate JSON files for each entity |
+| Field Name           | Type   | Required | Description                                           |
+|----------------------|--------|----------|-------------------------------------------------------|
+| `entities`           | Array  | Yes`*`   | Entities to be imported                               |
+| `entities_paths_map` | Object | Yes      | Relative paths to separate JSON files for each entity |
 
 ### - Description of fields
 
@@ -60,28 +60,28 @@ To perform the import, you need to have a `meta-data.json` file, which serves as
   ],
   "entities_paths_map": {
     "users": [
-      "users_0.json"
+      "./users_0.json"
     ],
     "boards": [
-      "boards_0.json"
+      "./boards_0.json"
     ],
     "columns": [
-      "columns_0.json"
+      "./columns_0.json"
     ],
     "cards": [
-      "cards_0.json"
+      "./cards_0.json"
     ],
     "custom_fields": [
-      "custom_fields_0.json"
+      "./custom_fields_0.json"
     ],
     "properties_mapping": [
-      "properties_mapping_0.json"
+      "./properties_mapping_0.json"
     ],
     "comments": [
-      "comments_0.json"
+      "./comments_0.json"
     ],
     "files": [
-      "files_0.json"
+      "./files_0.json"
     ]
   }
 }
@@ -256,9 +256,43 @@ To perform the import, you need to have a `meta-data.json` file, which serves as
 | `id`       | String \| Number                             | Yes      | Unique identifier of custom property. |
 | `value`    | String \| Number \| Date \| DateTime \| ID[] | Yes      | Custom property values.               |
 
-Custom property ID must exist or be included in the current import (custom fields data).
-If type of the value is `select` | `multi_select` | `people` then the value is array of IDs.
+Custom property ID must exist or be included in the current import (custom fields data).  
+- If type of the value is `select` | `multi_select` | `user` then the value is array of IDs.  
+- If type of the value is `date` then the value is DateTime string.  
+- If type of the value is `number` then the value is Number.
+- If type of the value is `text` then the value is String.  
 Custom property value ID must exist or be included in the current import (custom fields data or users data).
+
+### - Example
+
+```json
+[
+    {
+      "id": "1207888014064892", // text
+      "value": "Text example"
+    },
+    {
+      "id": "1207888014064899",  // number
+      "value": 123.456
+    },
+    {
+      "id": "1207914037042113",  // date
+      "value": "2024-07-17"
+    },
+    {
+      "id": "1207645766223465",   // user
+      "value": ["1207221263311709", "1207221341939584"]
+    },
+    {
+      "id": "1207631614467241", // select
+      "value": ["1207631614467242"]
+    },
+    {
+      "id": "1207723749200577", // multi_select
+      "value": ["1207723749200601", "1207723749200612"]
+    }
+]
+```
 
 ### - CardTags fields
 
