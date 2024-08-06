@@ -699,19 +699,13 @@ If the value includes time (DateTime) so `time_present` parameter should be set 
 
 ### - Description
 
-You can manually map external system IDs to Kaiten local IDs by creating collections in properties_mapping.
+You can manually map external system IDs to Kaiten local IDs by creating properties_mapping object.
 
 ### - Example JSON Structure
 ```json
-  [
-    {
-        "1207864637859350": 14
-    },
-    {
-        "1207864637859355": 14
-    },
-    {
-        "1207864637859408": 16
-    }
-  ]
+  {
+    "1207864637859350": 14,
+    "1207864637859355": 14,
+    "1207864637859408": 16,
+  }
 ```
